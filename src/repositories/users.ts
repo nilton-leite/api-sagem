@@ -1,6 +1,6 @@
 import Container from '@src/configs/ioc'
 import UsersModel from '@src/models/users'
-import { ICreate } from '@src/utils/types/users'
+import { ICreate } from '@src/utils/types/models/users'
 
 export interface IUsersRepository {
   create(params: ICreate): Promise<any>

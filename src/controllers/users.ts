@@ -3,7 +3,7 @@ import status from 'http-status'
 import Container from 'src/configs/ioc'
 import { Logger } from 'winston'
 import { IUsersService } from '@src/services/users'
-import { ICreate } from '@src/utils/types/users'
+import { ICreate } from '@src/utils/types/models/users'
 
 export class UsersController {
   private logger: Logger

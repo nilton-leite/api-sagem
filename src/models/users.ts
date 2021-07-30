@@ -1,4 +1,3 @@
-import { ICreate } from '@src/utils/types/users'
 import { Document, Model, Schema, model } from 'mongoose'
 
 export interface IUsers extends Document {

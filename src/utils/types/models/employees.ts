@@ -3,5 +3,4 @@ export interface ICreate {
   cpf: string
   telephone: string
   email: string
-  available_services?: Object[]
 }

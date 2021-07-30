@@ -6,6 +6,7 @@ import routes from './routes'
 import Container from './configs/ioc'
 import { UsersController } from './controllers/users'
 import { EmployeesController } from './controllers/employees'
+import { ServicesController } from './controllers/services'
 import AuthenticationMiddleware from './middlewares/authentication'
 import cors from 'cors'
 
@@ -15,6 +16,7 @@ export class Server {
   private logType: string
   private usersController: UsersController
   private employeesController: EmployeesController
+  private servicesController: ServicesController
   private logger: Logger
 
   constructor({
@@ -23,6 +25,7 @@ export class Server {
     nodeEnv,
     usersController,
     employeesController,
+    servicesController,
     logger,
   }: Container) {
     this.app = app
@@ -31,6 +34,7 @@ export class Server {
       nodeEnv === 'dev' ? 'dev' : ':method :url :status :response-time'
     this.usersController = usersController
     this.employeesController = employeesController
+    this.servicesController = servicesController
     this.logger = logger
   }
 
@@ -59,6 +63,7 @@ export class Server {
     const router = await routes({
       usersController: this.usersController,
       employeesController: this.employeesController,
+      servicesController: this.servicesController,
     })
 
     this.app.use(router)

@@ -9,12 +9,15 @@ import { MongoDB } from '@src/configs/databases/mongo'
 
 import { UsersController } from '@src/controllers/users'
 import { EmployeesController } from '@src/controllers/employees'
+import { ServicesController } from '@src/controllers/services'
 
 import { UsersService } from '@src/services/Users'
-import { EmployeesService, IEmployeesService } from '@src/services/employees'
+import { EmployeesService } from '@src/services/employees'
+import { ServicesService } from '@src/services/services'
 
 import { UsersRepository } from '@src/repositories/Users'
 import { EmployeesRepository } from '@src/repositories/employees'
+import { ServicesRepository } from '@src/repositories/services'
 
 export async function createContainer(): Promise<awilix.AwilixContainer<any>> {
   const container = awilix.createContainer()
@@ -45,14 +48,17 @@ export async function createContainer(): Promise<awilix.AwilixContainer<any>> {
     // CONTROLLERS -------------------------------------------------------------------
     usersController: awilix.asClass(UsersController),
     employeesController: awilix.asClass(EmployeesController),
+    servicesController: awilix.asClass(ServicesController),
 
     // SERVICES ----------------------------------------------------------------------
     usersService: awilix.asFunction(UsersService),
     employeesService: awilix.asFunction(EmployeesService),
+    servicesService: awilix.asFunction(ServicesService),
 
     // REPOSITORIES ------------------------------------------------------------------
     usersRepository: awilix.asFunction(UsersRepository),
     employeesRepository: awilix.asFunction(EmployeesRepository),
+    servicesRepository: awilix.asFunction(ServicesRepository),
   }
 
   container.register(configs)
