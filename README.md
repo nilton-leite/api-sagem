@@ -27,4 +27,4 @@ yarn dev
 
 ### Who do I talk to?
 
-- Trizy architecture team: joao.mayer@trizy.com.br
+- Developer: nilton.a.junior@hotmail.com.br
