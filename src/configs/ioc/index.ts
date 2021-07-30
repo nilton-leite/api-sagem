@@ -7,11 +7,11 @@ import { Server } from '@src/server'
 import logger from '@src/configs/logs/winston'
 import { MongoDB } from '@src/configs/databases/mongo'
 
-import { HealthCheckController } from '@src/controllers/healthcheck'
+import { UsersController } from '@src/controllers/users'
 
-import { HealthCheckService } from '@src/services/healthcheck'
+import { UsersService } from '@src/services/Users'
 
-import { HealthCheckRepository } from '@src/repositories/healthcheck'
+import { UsersRepository } from '@src/repositories/Users'
 
 export async function createContainer(): Promise<awilix.AwilixContainer<any>> {
   const container = awilix.createContainer()
@@ -40,13 +40,13 @@ export async function createContainer(): Promise<awilix.AwilixContainer<any>> {
     server: awilix.asClass(Server),
 
     // CONTROLLERS -------------------------------------------------------------------
-    healthCheckController: awilix.asClass(HealthCheckController),
+    usersController: awilix.asClass(UsersController),
 
     // SERVICES ----------------------------------------------------------------------
-    healthCheckService: awilix.asFunction(HealthCheckService),
+    usersService: awilix.asFunction(UsersService),
 
     // REPOSITORIES ------------------------------------------------------------------
-    healthCheckRepository: awilix.asFunction(HealthCheckRepository),
+    usersRepository: awilix.asFunction(UsersRepository),
   }
 
   container.register(configs)

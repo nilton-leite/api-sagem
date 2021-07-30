@@ -4,11 +4,11 @@ import { Server } from '@src/server'
 import { Knex } from 'knex'
 import { MongoDB } from '@src/configs/databases/mongo'
 
-import { HealthCheckController } from '@src/controllers/healthcheck'
+import { UsersController } from '@src/controllers/users'
 
-import { IHealthCheckService } from '@src/services/healthcheck'
+import { IUsersService } from '@src/services/Users'
 
-import { IHealthCheckRepository } from '@src/repositories/healthcheck'
+import { IUsersRepository } from '@src/repositories/Users'
 
 interface Container {
   // CONFIGS --------------------------------------------
@@ -28,13 +28,13 @@ interface Container {
   server: Server
 
   // CONTROLLERS ----------------------------------------
-  healthCheckController: HealthCheckController
+  usersController: UsersController
 
   // SERVICES -------------------------------------------
-  healthCheckService: IHealthCheckService
+  usersService: IUsersService
 
   // REPOSITORIES ---------------------------------------
-  healthCheckRepository: IHealthCheckRepository
+  usersRepository: IUsersRepository
 }
 
 export default Container

@@ -4,7 +4,7 @@ import morgan from 'morgan'
 import { Logger } from 'winston'
 import routes from './routes'
 import Container from './configs/ioc'
-import { HealthCheckController } from './controllers/healthcheck'
+import { UsersController } from './controllers/users'
 import AuthenticationMiddleware from './middlewares/authentication'
 import cors from 'cors'
 
@@ -12,21 +12,15 @@ export class Server {
   private app: Express
   private port: number
   private logType: string
-  private healthCheckController: HealthCheckController
+  private usersController: UsersController
   private logger: Logger
 
-  constructor({
-    app,
-    port,
-    nodeEnv,
-    healthCheckController,
-    logger,
-  }: Container) {
+  constructor({ app, port, nodeEnv, usersController, logger }: Container) {
     this.app = app
     this.port = port
     this.logType =
       nodeEnv === 'dev' ? 'dev' : ':method :url :status :response-time'
-    this.healthCheckController = healthCheckController
+    this.usersController = usersController
     this.logger = logger
   }
 
@@ -47,13 +41,13 @@ export class Server {
     )
     this.app.use(bodyParser.json({ type: '*/*', limit: '50mb' }))
     this.app.use(bodyParser.urlencoded({ extended: false }))
-    this.app.use(AuthenticationMiddleware(this.logType))
+    // this.app.use(AuthenticationMiddleware(this.logType))
     if (this.logType === 'dev') this.app.use(cors())
   }
 
   private async setupRoutes(): Promise<void> {
     const router = await routes({
-      healthCheckController: this.healthCheckController,
+      usersController: this.usersController,
     })
 
     this.app.use(router)

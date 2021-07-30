@@ -1,23 +1,18 @@
 import { Router } from 'express'
-import swaggerUi from 'swagger-ui-express'
-import * as YAML from 'yamljs'
-import cron from 'node-cron'
 
 // Controllers
-import { HealthCheckController } from './controllers/healthcheck'
+import { UsersController } from './controllers/users'
 
 interface Controllers {
-  healthCheckController: HealthCheckController
+  usersController: UsersController
 }
 
-export default async ({ healthCheckController }: Controllers) => {
+export default async ({ usersController }: Controllers) => {
   const router = Router()
 
-  // Healthcheck routes
-  router.get(
-    '/healthcheck',
-    healthCheckController.check.bind(healthCheckController)
-  )
+  // Users routes
+  router.post('/users', usersController.create.bind(usersController))
+  // router.get('/users', usersController.find.bind(usersController))
 
   return router
 }
