@@ -8,10 +8,13 @@ import logger from '@src/configs/logs/winston'
 import { MongoDB } from '@src/configs/databases/mongo'
 
 import { UsersController } from '@src/controllers/users'
+import { EmployeesController } from '@src/controllers/employees'
 
 import { UsersService } from '@src/services/Users'
+import { EmployeesService, IEmployeesService } from '@src/services/employees'
 
 import { UsersRepository } from '@src/repositories/Users'
+import { EmployeesRepository } from '@src/repositories/employees'
 
 export async function createContainer(): Promise<awilix.AwilixContainer<any>> {
   const container = awilix.createContainer()
@@ -41,12 +44,15 @@ export async function createContainer(): Promise<awilix.AwilixContainer<any>> {
 
     // CONTROLLERS -------------------------------------------------------------------
     usersController: awilix.asClass(UsersController),
+    employeesController: awilix.asClass(EmployeesController),
 
     // SERVICES ----------------------------------------------------------------------
     usersService: awilix.asFunction(UsersService),
+    employeesService: awilix.asFunction(EmployeesService),
 
     // REPOSITORIES ------------------------------------------------------------------
     usersRepository: awilix.asFunction(UsersRepository),
+    employeesRepository: awilix.asFunction(EmployeesRepository),
   }
 
   container.register(configs)

@@ -5,10 +5,13 @@ import { Knex } from 'knex'
 import { MongoDB } from '@src/configs/databases/mongo'
 
 import { UsersController } from '@src/controllers/users'
+import { EmployeesController } from '@src/controllers/employees'
 
 import { IUsersService } from '@src/services/Users'
+import { IEmployeesService } from '@src/services/employees'
 
 import { IUsersRepository } from '@src/repositories/Users'
+import { IEmployeesRepository } from '@src/repositories/employees'
 
 interface Container {
   // CONFIGS --------------------------------------------
@@ -29,12 +32,15 @@ interface Container {
 
   // CONTROLLERS ----------------------------------------
   usersController: UsersController
+  employeesController: EmployeesController
 
   // SERVICES -------------------------------------------
   usersService: IUsersService
+  employeesService: IEmployeesService
 
   // REPOSITORIES ---------------------------------------
   usersRepository: IUsersRepository
+  employeesRepository: IEmployeesRepository
 }
 
 export default Container

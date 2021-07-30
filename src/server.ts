@@ -5,6 +5,7 @@ import { Logger } from 'winston'
 import routes from './routes'
 import Container from './configs/ioc'
 import { UsersController } from './controllers/users'
+import { EmployeesController } from './controllers/employees'
 import AuthenticationMiddleware from './middlewares/authentication'
 import cors from 'cors'
 
@@ -13,14 +14,23 @@ export class Server {
   private port: number
   private logType: string
   private usersController: UsersController
+  private employeesController: EmployeesController
   private logger: Logger
 
-  constructor({ app, port, nodeEnv, usersController, logger }: Container) {
+  constructor({
+    app,
+    port,
+    nodeEnv,
+    usersController,
+    employeesController,
+    logger,
+  }: Container) {
     this.app = app
     this.port = port
     this.logType =
       nodeEnv === 'dev' ? 'dev' : ':method :url :status :response-time'
     this.usersController = usersController
+    this.employeesController = employeesController
     this.logger = logger
   }
 
@@ -48,6 +58,7 @@ export class Server {
   private async setupRoutes(): Promise<void> {
     const router = await routes({
       usersController: this.usersController,
+      employeesController: this.employeesController,
     })
 
     this.app.use(router)

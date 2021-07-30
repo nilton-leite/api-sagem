@@ -2,16 +2,16 @@ import { Request, Response } from 'express'
 import status from 'http-status'
 import Container from 'src/configs/ioc'
 import { Logger } from 'winston'
-import { IUsersService } from '@src/services/users'
-import { ICreate } from '@src/utils/types/users'
+import { IEmployeesService } from '@src/services/employees'
+import { ICreate } from '@src/utils/types/employees'
 
-export class UsersController {
+export class EmployeesController {
   private logger: Logger
-  private usersService: IUsersService
+  private employeesService: IEmployeesService
 
-  constructor({ logger, usersService }: Container) {
+  constructor({ logger, employeesService }: Container) {
     this.logger = logger
-    this.usersService = usersService
+    this.employeesService = employeesService
   }
 
   public async create(req: Request, res: Response) {
@@ -22,9 +22,10 @@ export class UsersController {
       cpf: cpf,
       telephone: telephone,
       email: email,
+      // TODO colocar os services
     }
 
-    const retorno = await this.usersService.create({ data: parameters })
+    const retorno = await this.employeesService.create({ data: parameters })
     return res.status(status.OK).send(retorno)
   }
 }

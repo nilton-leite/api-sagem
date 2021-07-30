@@ -10,7 +10,6 @@ export interface IUsers extends Document {
   token_facebook?: String
   token_google?: String
 }
-export type CampaignDocument = ICreate & Document
 
 interface IUsersModels extends Model<IUsers> {}
 
