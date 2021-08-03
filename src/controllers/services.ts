@@ -38,4 +38,13 @@ export class ServicesController {
     const retorno = await this.servicesService.create({ data: parameters })
     return res.status(status.OK).send(retorno)
   }
+
+  public async find(req: Request, res: Response) {
+    const retorno = await this.servicesService.find()
+    if (retorno === null) {
+      return res.status(400).send('Nenhum serviço disponível!')
+    }
+
+    return res.status(status.OK).send(retorno)
+  }
 }

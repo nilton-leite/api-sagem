@@ -5,6 +5,7 @@ export interface IEmployees extends Document {
   cpf: String
   telephone: String
   email: String
+  description: String
 }
 
 interface IEmployeesModels extends Model<IEmployees> {}
@@ -15,12 +16,7 @@ const schema = new Schema(
     cpf: { type: String, required: true },
     telephone: { type: String, required: true },
     email: { type: String, required: true },
-    // available_services: [
-    //   {
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'services',
-    //   },
-    // ],
+    description: { type: String, required: false },
   },
   { collection: 'employees', timestamps: { createdAt: 'dateInsert' } }
 )
