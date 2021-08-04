@@ -15,13 +15,14 @@ export class EmployeesController {
   }
 
   public async create(req: Request, res: Response) {
-    const { full_name, cpf, telephone, email } = req.body
+    const { full_name, cpf, telephone, email, description } = req.body
 
     let parameters: ICreate = {
       full_name: full_name,
       cpf: cpf,
       telephone: telephone,
       email: email,
+      description: description,
       // TODO colocar os services
     }
 
