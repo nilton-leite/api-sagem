@@ -15,22 +15,12 @@ export class ServicesController {
   }
 
   public async create(req: Request, res: Response) {
-    const {
-      title,
-      description,
-      price,
-      start_time,
-      end_time,
-      interval_time,
-      employees,
-    } = req.body
+    const { title, description, price, interval_time, employees } = req.body
 
     let parameters: ICreate = {
       title: title,
       description: description,
       price: price,
-      start_time: start_time,
-      end_time: end_time,
       interval_time: interval_time,
       employees: employees,
     }

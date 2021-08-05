@@ -6,6 +6,9 @@ export interface IEmployees extends Document {
   telephone: String
   email: String
   description: String
+  start_time: string
+  end_time: string
+  active: boolean
 }
 
 interface IEmployeesModels extends Model<IEmployees> {}
@@ -17,6 +20,9 @@ const schema = new Schema(
     telephone: { type: String, required: true },
     email: { type: String, required: true },
     description: { type: String, required: false },
+    start_time: { type: String, required: true },
+    end_time: { type: String, required: true },
+    active: { type: Boolean, required: true, default: true },
   },
   { collection: 'employees', timestamps: { createdAt: 'dateInsert' } }
 )

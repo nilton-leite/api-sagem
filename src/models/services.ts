@@ -4,8 +4,6 @@ export interface IServices extends Document {
   title: string
   description: string
   price: string
-  start_time: string
-  end_time: string
   interval_time: string
   employees: Object[]
 }
@@ -17,8 +15,6 @@ const schema = new Schema(
     title: { type: String, required: true },
     description: { type: String, required: true },
     price: { type: String, required: true },
-    start_time: { type: String, required: true },
-    end_time: { type: String, required: true },
     interval_time: { type: String, required: true },
     employees: [
       {

@@ -4,17 +4,20 @@ import { Router } from 'express'
 import { UsersController } from './controllers/users'
 import { EmployeesController } from './controllers/employees'
 import { ServicesController } from './controllers/services'
+import { SchedulesController } from './controllers/schedules'
 
 interface Controllers {
   usersController: UsersController
   employeesController: EmployeesController
   servicesController: ServicesController
+  schedulesController: SchedulesController
 }
 
 export default async ({
   usersController,
   employeesController,
   servicesController,
+  schedulesController,
 }: Controllers) => {
   const router = Router()
 
@@ -30,6 +33,8 @@ export default async ({
 
   router.post('/services', servicesController.create.bind(servicesController))
   router.get('/services', servicesController.find.bind(servicesController))
+
+  router.get('/schedules', servicesController.find.bind(servicesController))
 
   return router
 }

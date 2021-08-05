@@ -4,4 +4,7 @@ export interface ICreate {
   telephone: string
   email: string
   description: string
+  start_time: string
+  end_time: string
+  active: boolean
 }
