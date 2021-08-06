@@ -1,3 +1,4 @@
+import { Types } from 'mongoose'
 export interface ICreate {
   full_name: string
   cpf: string
@@ -7,4 +8,8 @@ export interface ICreate {
   start_time: string
   end_time: string
   active: boolean
+}
+
+export interface IFindById {
+  _id: Types.ObjectId
 }

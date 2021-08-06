@@ -34,7 +34,7 @@ export default async ({
   router.post('/services', servicesController.create.bind(servicesController))
   router.get('/services', servicesController.find.bind(servicesController))
 
-  router.get('/schedules', servicesController.find.bind(servicesController))
+  router.get('/schedules', schedulesController.find.bind(schedulesController))
 
   return router
 }
