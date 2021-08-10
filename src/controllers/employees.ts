@@ -22,8 +22,11 @@ export class EmployeesController {
       email,
       description,
       active,
-      start_time,
-      end_time,
+      start_morning_time,
+      end_morning_time,
+      start_afternoon_time,
+      end_afternoon_time,
+      services,
     } = req.body
 
     let parameters: ICreate = {
@@ -33,9 +36,11 @@ export class EmployeesController {
       email: email,
       description: description,
       active: active,
-      start_time: start_time,
-      end_time: end_time,
-      // TODO colocar os services
+      start_morning_time: start_morning_time,
+      end_morning_time: end_morning_time,
+      start_afternoon_time: start_afternoon_time,
+      end_afternoon_time: end_afternoon_time,
+      services: services,
     }
 
     const retorno = await this.employeesService.create({ data: parameters })

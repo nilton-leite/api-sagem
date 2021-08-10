@@ -32,10 +32,10 @@ export const ServicesRepository = ({}: Container): IServicesRepository => {
           $project: {
             title: 1,
             description: 1,
-            price: 1,
+            price_default: 1,
             start_time: 1,
             end_time: 1,
-            interval_time: 1,
+            interval_time_default: 1,
             icon: 1,
             active: 1,
             'employees._id': 1,

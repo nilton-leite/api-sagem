@@ -18,18 +18,16 @@ export class ServicesController {
     const {
       title,
       description,
-      price,
-      interval_time,
-      employees,
+      price_default,
+      execution_time_default,
       active,
     } = req.body
 
     let parameters: ICreate = {
       title: title,
       description: description,
-      price: price,
-      interval_time: interval_time,
-      employees: employees,
+      price_default: price_default,
+      execution_time_default: execution_time_default,
       active: active,
     }
 

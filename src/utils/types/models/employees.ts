@@ -5,9 +5,16 @@ export interface ICreate {
   telephone: string
   email: string
   description: string
-  start_time: string
-  end_time: string
+  start_morning_time: string
+  end_morning_time: string
+  start_afternoon_time: string
+  end_afternoon_time: string
   active: boolean
+  services: {
+    serviceId: ReturnType<typeof Types.ObjectId>
+    price: Number
+    execution_time: Number
+  }[]
 }
 
 export interface IFindById {

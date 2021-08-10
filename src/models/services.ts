@@ -3,9 +3,8 @@ import { Document, Model, Schema, model } from 'mongoose'
 export interface IServices extends Document {
   title: string
   description: string
-  price: string
-  interval_time: string
-  employees: Object[]
+  price_default: Number
+  execution_time_default: Number
   active: Boolean
 }
 
@@ -15,15 +14,9 @@ const schema = new Schema(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
-    price: { type: String, required: true },
-    interval_time: { type: String, required: true },
+    price_default: { type: Number, required: true },
+    execution_time_default: { type: Number, required: true },
     active: { type: Boolean, required: true, default: true },
-    employees: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'employees',
-      },
-    ],
   },
   { collection: 'services', timestamps: { createdAt: 'dateInsert' } }
 )

@@ -3,9 +3,8 @@ import { Types } from 'mongoose'
 export interface ICreate {
   title: string
   description: string
-  price: string
-  interval_time: string
-  employees: Object[]
+  price_default: Number
+  execution_time_default: Number
   active: Boolean
 }
 export interface IFindById {
