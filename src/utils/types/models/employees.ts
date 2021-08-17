@@ -20,3 +20,6 @@ export interface ICreate {
 export interface IFindById {
   _id: Types.ObjectId
 }
+export interface IFindByService {
+  serviceId: Types.ObjectId
+}

@@ -6,6 +6,7 @@ export interface IServices extends Document {
   price_default: Number
   execution_time_default: Number
   active: Boolean
+  icon: string
 }
 
 interface IServicesModels extends Model<IServices> {}
@@ -17,6 +18,7 @@ const schema = new Schema(
     price_default: { type: Number, required: true },
     execution_time_default: { type: Number, required: true },
     active: { type: Boolean, required: true, default: true },
+    icon: { type: String, required: true },
   },
   { collection: 'services', timestamps: { createdAt: 'dateInsert' } }
 )

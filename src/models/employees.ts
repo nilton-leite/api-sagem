@@ -36,7 +36,7 @@ const schema = new Schema(
       {
         serviceId: {
           type: Schema.Types.ObjectId,
-          ref: 'employees',
+          ref: 'services',
           required: false,
         },
         price: { type: Number, required: false },

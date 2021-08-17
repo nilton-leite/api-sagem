@@ -6,6 +6,7 @@ export interface ICreate {
   price_default: Number
   execution_time_default: Number
   active: Boolean
+  icon: string
 }
 export interface IFindById {
   _id: Types.ObjectId
