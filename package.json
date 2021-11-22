@@ -26,6 +26,7 @@
     "fp-ts": "^2.9.5",
     "http-status": "^1.5.0",
     "knex": "^0.95.6",
+    "migrate-mongo": "^8.2.3",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
     "mongoose": "^5.12.3",

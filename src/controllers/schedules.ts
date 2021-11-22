@@ -55,6 +55,9 @@ export class SchedulesController {
         },
       })
 
+      console.log('employe', employee)
+      console.log('service', service)
+
       if (employee && service) {
         this.intervalTime(employee, intervalHours, service)
 
@@ -77,18 +80,31 @@ export class SchedulesController {
   }
 
   private intervalTime(employee: any, hours: any[], service: any) {
-    let startTime = employee.start_time.split(':')
-    let endTime = employee.end_time.split(':')
+    let startTimeMorning = employee.start_morning_time.split(':')
+    let endTimeMorning = employee.end_morning_time.split(':')
+
+    let startTimeAfternoon = employee.start_afternoon_time.split(':')
+    let endTimeAfternoon = employee.end_afternoon_time.split(':')
     const locale = 'pt'
 
     moment.locale(locale)
 
-    for (let hour = startTime[0]; hour < endTime[0]; hour++) {
+    for (let hour = startTimeMorning[0]; hour < endTimeMorning[0]; hour++) {
       hours.push(moment({ hour }).format('HH:mm'))
       hours.push(
         moment({
           hour,
-          minute: service.interval_time,
+          minute: service.execution_time_default,
+        }).format('HH:mm')
+      )
+    }
+
+    for (let hour = startTimeAfternoon[0]; hour < endTimeAfternoon[0]; hour++) {
+      hours.push(moment({ hour }).format('HH:mm'))
+      hours.push(
+        moment({
+          hour,
+          minute: service.execution_time_default,
         }).format('HH:mm')
       )
     }
