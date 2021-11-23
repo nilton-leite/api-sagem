@@ -48,6 +48,10 @@ export class SchedulesController {
         },
       })
 
+      const employeeService = employee.services.filter(function (item: any) {
+        return item.serviceId.toString() === serviceId.toString()
+      })
+
       const service = await this.servicesService.findById({
         data: {
           _id: Types.ObjectId(serviceId.toString()),
@@ -55,11 +59,8 @@ export class SchedulesController {
         },
       })
 
-      console.log('employe', employee)
-      console.log('service', service)
-
       if (employee && service) {
-        this.intervalTime(employee, intervalHours, service)
+        this.intervalTime(employee, employeeService[0], intervalHours, service)
 
         const getInterval = intervalDate.map(async (index: any) => {
           intervalFinal.push({ date: index, times: intervalHours })
@@ -68,7 +69,15 @@ export class SchedulesController {
 
         await Promise.all(getInterval)
 
-        return res.status(status.OK).send(intervalFinal)
+        return res.status(status.OK).send([
+          {
+            intervalFinal,
+            full_name: employee.full_name,
+            telephone: employee.telephone,
+            price: employeeService[0].price,
+            execution_time: employeeService[0].execution_time,
+          },
+        ])
       } else {
         return res
           .status(409)
@@ -79,7 +88,12 @@ export class SchedulesController {
     }
   }
 
-  private intervalTime(employee: any, hours: any[], service: any) {
+  private intervalTime(
+    employee: any,
+    employeeService: any,
+    hours: any[],
+    service: any
+  ) {
     let startTimeMorning = employee.start_morning_time.split(':')
     let endTimeMorning = employee.end_morning_time.split(':')
 
@@ -90,23 +104,37 @@ export class SchedulesController {
     moment.locale(locale)
 
     for (let hour = startTimeMorning[0]; hour < endTimeMorning[0]; hour++) {
+      let minuteMorning: number = 0
       hours.push(moment({ hour }).format('HH:mm'))
-      hours.push(
-        moment({
-          hour,
-          minute: service.execution_time_default,
-        }).format('HH:mm')
-      )
+      for (let minute = 0; minute < 60; minute++) {
+        minuteMorning += employeeService.execution_time
+          ? employeeService.execution_time
+          : service.execution_time_default
+        if (minuteMorning >= 60) break
+        hours.push(
+          moment({
+            hour,
+            minute: minuteMorning,
+          }).format('HH:mm')
+        )
+      }
     }
 
     for (let hour = startTimeAfternoon[0]; hour < endTimeAfternoon[0]; hour++) {
+      let minuteAfternoon: number = 0
       hours.push(moment({ hour }).format('HH:mm'))
-      hours.push(
-        moment({
-          hour,
-          minute: service.execution_time_default,
-        }).format('HH:mm')
-      )
+      for (let minute = 0; minute < 60; minute++) {
+        minuteAfternoon += employeeService.execution_time
+          ? employeeService.execution_time
+          : service.execution_time_default
+        if (minuteAfternoon >= 60) break
+        hours.push(
+          moment({
+            hour,
+            minute: minuteAfternoon,
+          }).format('HH:mm')
+        )
+      }
     }
   }
 
