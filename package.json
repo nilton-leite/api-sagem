@@ -1,7 +1,7 @@
 {
-  "name": "api-crm",
+  "name": "api-sagem",
   "version": "1.0.0",
-  "description": "Mobile CRM backend.",
+  "description": "SAGEM API.",
   "scripts": {
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
     "start": "yarn build && node dist/app.js",
@@ -12,10 +12,10 @@
     "style:fix": "prettier --write src/**/*.ts test/**/*.ts",
     "test": "jest"
   },
-  "repository": "git+https://joaomayer@bitbucket.org/kmmsinergia/api-crm.git",
+  "repository": "https://github.com/nilton-leite/api-sagem.git",
   "keywords": [],
-  "author": "Joao Davi Mayer <joao.mayer@trizy.com.br>",
-  "homepage": "https://bitbucket.org/kmmsinergia/api-crm#readme",
+  "author": "Nilton Amaral <nilton.a.junior@hotmail.com>",
+  "homepage": "https://github.com/nilton-leite/api-sagem",
   "dependencies": {
     "awilix": "^4.3.3",
     "aws-sdk": "^2.880.0",
