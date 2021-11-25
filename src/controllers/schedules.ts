@@ -5,9 +5,10 @@ import { Logger } from 'winston'
 import { ISchedulesService } from '@src/services/schedules'
 import { IEmployeesService } from '@src/services/employees'
 import { IServicesService } from '@src/services/services'
-import { IFindById } from '@src/utils/types/models/employees'
 import { Types } from 'mongoose'
 import moment from 'moment'
+import { parse } from 'date-fns'
+import { ICreate, IGet } from '@src/utils/types/models/schedules'
 
 export class SchedulesController {
   private logger: Logger
@@ -25,6 +26,25 @@ export class SchedulesController {
     this.schedulesService = schedulesService
     this.employeesService = employeesService
     this.servicesService = servicesService
+  }
+
+  async save(req: Request, res: Response) {
+    const { employeeId, serviceId, userId, dataSchedule, time } = req.body
+
+    const parameters: ICreate = {
+      employeeId,
+      serviceId,
+      userId,
+      dataSchedule,
+      time,
+    }
+
+    try {
+      const retorno = await this.schedulesService.create({ data: parameters })
+      return res.status(status.OK).send(retorno)
+    } catch (error: any) {
+      return res.status(400).send(error.message)
+    }
   }
 
   public async find(req: Request, res: Response) {
@@ -69,13 +89,52 @@ export class SchedulesController {
 
         await Promise.all(getInterval)
 
+        let teste: any = intervalFinal
+
+        let hours: any = []
+        const getHour = intervalFinal.map(
+          async (itemInterval: any, indexDate: number) => {
+            let schedule = await this.schedulesService.getByDate({
+              data: {
+                userId: Types.ObjectId('6116bf9e1c964e29788db56a'.toString()),
+                employeeId: Types.ObjectId(employeeId.toString()),
+                serviceId: Types.ObjectId(serviceId.toString()),
+                dataSchedule: itemInterval.date,
+              },
+            })
+            console.log('indice', indexDate)
+            if (schedule.length > 0) {
+              const PromisseHour = intervalFinal[indexDate].times.map(
+                async (itemTime: any, indexTime: number) => {
+                  for (var key in schedule) {
+                    if (schedule[key].time === itemTime) {
+                      let filtered = intervalFinal[indexDate].times.filter(
+                        (item: number[]) => !item.includes(itemTime)
+                      )
+                      intervalFinal[indexDate].times = filtered // Coloca os dados novos no filtro
+                    }
+                  }
+                }
+              )
+
+              await Promise.all(PromisseHour)
+            }
+            console.log(itemInterval)
+            return intervalFinal
+          }
+        )
+
+        await Promise.all(getHour)
+
         return res.status(status.OK).send([
           {
             intervalFinal,
-            full_name: employee.full_name,
+            fullName: employee.full_name,
             telephone: employee.telephone,
             price: employeeService[0].price,
             execution_time: employeeService[0].execution_time,
+            icon: service.icon,
+            service: service.title,
           },
         ])
       } else {
@@ -88,7 +147,7 @@ export class SchedulesController {
     }
   }
 
-  private intervalTime(
+  private async intervalTime(
     employee: any,
     employeeService: any,
     hours: any[],
@@ -100,7 +159,6 @@ export class SchedulesController {
     let startTimeAfternoon = employee.start_afternoon_time.split(':')
     let endTimeAfternoon = employee.end_afternoon_time.split(':')
     const locale = 'pt'
-
     moment.locale(locale)
 
     for (let hour = startTimeMorning[0]; hour < endTimeMorning[0]; hour++) {

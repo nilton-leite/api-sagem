@@ -4,7 +4,7 @@ export interface ISchedules extends Document {
   employeeId: Types.ObjectId
   userId: Types.ObjectId
   serviceId: Types.ObjectId
-  dataSchedule: Date
+  dataSchedule: String
   time: String
 }
 
@@ -15,7 +15,7 @@ const schema = new Schema(
     employeeId: { type: Types.ObjectId, required: true },
     userId: { type: Types.ObjectId, required: true },
     serviceId: { type: Types.ObjectId, required: true },
-    dataSchedule: { type: Date, required: true },
+    dataSchedule: { type: String, required: true },
     time: { type: String, required: true },
   },
   { collection: 'schedules', timestamps: { createdAt: 'dateInsert' } }
