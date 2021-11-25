@@ -1,1 +1,1 @@
-web: ts-node-dev -r tsconfig-paths/register src/app.ts
+web: node src/app.ts
