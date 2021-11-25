@@ -67,8 +67,9 @@ export class SchedulesController {
           _id: Types.ObjectId(employeeId.toString()),
         },
       })
-      if (employee.length === 0) {
-        throw 'Não encontramos nenhum funcionário!'
+      console.log(employee)
+      if (employee === null) {
+        return res.status(400).send('Não encontramos nenhum funcionário!')
       }
 
       const employeeService = employee.services.filter(function (item: any) {
