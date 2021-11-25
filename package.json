@@ -90,5 +90,8 @@
       "git add"
     ]
   },
+  "engines": {
+    "node": "16.13.0"
+  },
   "main": "app.ts"
 }
