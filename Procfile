@@ -1,1 +1,1 @@
-web: yarn build && node dist/app.js
+web: node dist/app.js
