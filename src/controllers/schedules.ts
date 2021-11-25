@@ -67,6 +67,9 @@ export class SchedulesController {
           _id: Types.ObjectId(employeeId.toString()),
         },
       })
+      if (employee.length === 0) {
+        throw 'Não encontramos nenhum funcionário!'
+      }
 
       const employeeService = employee.services.filter(function (item: any) {
         return item.serviceId.toString() === serviceId.toString()
@@ -119,7 +122,6 @@ export class SchedulesController {
 
               await Promise.all(PromisseHour)
             }
-            console.log(itemInterval)
             return intervalFinal
           }
         )
