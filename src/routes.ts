@@ -37,5 +37,10 @@ export default async ({
   router.post('/schedules', schedulesController.save.bind(schedulesController))
   router.get('/schedules', schedulesController.find.bind(schedulesController))
 
+  router.get(
+    '/schedulesUser',
+    schedulesController.get.bind(schedulesController)
+  )
+
   return router
 }

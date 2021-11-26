@@ -1,9 +1,11 @@
 import Container from '@src/configs/ioc'
 import { ICreate, IGet } from '@src/utils/types/models/schedules'
+import { Document, Types } from 'mongoose'
 
 export interface ISchedulesService {
   create(params: { data: ICreate }): Promise<any>
   getByDate(params: { data: IGet }): Promise<any>
+  get(userId: Types.ObjectId): Promise<any>
 }
 
 export const SchedulesService = ({
@@ -16,6 +18,10 @@ export const SchedulesService = ({
     },
     getByDate: async (data) => {
       const getData: any = await schedulesRepository.getByDate(data.data)
+      return getData
+    },
+    get: async (userId) => {
+      const getData: any = await schedulesRepository.get(userId)
       return getData
     },
   }

@@ -28,6 +28,19 @@ export class SchedulesController {
     this.servicesService = servicesService
   }
 
+  async get(req: Request, res: Response) {
+    const { userId } = req.query
+
+    try {
+      const retorno = await this.schedulesService.get(
+        Types.ObjectId('6116bf9e1c964e29788db56a'.toString())
+      )
+      return res.status(status.OK).send(retorno)
+    } catch (error: any) {
+      return res.status(400).send(error.message)
+    }
+  }
+
   async save(req: Request, res: Response) {
     const { employeeId, serviceId, userId, dataSchedule, time } = req.body
 
