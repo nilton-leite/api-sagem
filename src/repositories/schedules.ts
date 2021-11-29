@@ -25,9 +25,42 @@ export const SchedulesRepository = ({}: Container): ISchedulesRepository => {
       return item
     },
     get: async (userId: Types.ObjectId) => {
-      const item = await SchedulesModel.find({
-        userId: userId,
-      })
+      const item = await SchedulesModel.aggregate([
+        { $match: { userId } },
+        {
+          $lookup: {
+            from: 'employees',
+            localField: 'employeeId',
+            foreignField: '_id',
+            as: 'employees',
+          },
+        },
+        {
+          $lookup: {
+            from: 'services',
+            localField: 'serviceId',
+            foreignField: '_id',
+            as: 'services',
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            dataSchedule: 1,
+            time: 1,
+            price: 1,
+            'employees._id': 1,
+            'employees.full_name': 1,
+            'employees.cpf': 1,
+            'employees.telephone': 1,
+            'employees.email': 1,
+            'employees.description': 1,
+            'services.title': 1,
+            'services.description': 1,
+            'services.icon': 1,
+          },
+        },
+      ])
       return item
     },
   }

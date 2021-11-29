@@ -6,6 +6,7 @@ export interface ISchedules extends Document {
   serviceId: Types.ObjectId
   dataSchedule: String
   time: String
+  price: Number
 }
 
 interface ISchedulesModels extends Model<ISchedules> {}
@@ -17,6 +18,7 @@ const schema = new Schema(
     serviceId: { type: Types.ObjectId, required: true },
     dataSchedule: { type: String, required: true },
     time: { type: String, required: true },
+    price: { type: Number, required: true },
   },
   { collection: 'schedules', timestamps: { createdAt: 'dateInsert' } }
 )

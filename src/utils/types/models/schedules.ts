@@ -6,6 +6,7 @@ export interface ICreate {
   serviceId: Types.ObjectId
   dataSchedule: String
   time: String
+  price: Number
 }
 export interface IGet {
   userId: Types.ObjectId

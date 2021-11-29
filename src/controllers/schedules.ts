@@ -31,18 +31,23 @@ export class SchedulesController {
   async get(req: Request, res: Response) {
     const { userId } = req.query
 
-    try {
-      const retorno = await this.schedulesService.get(
-        Types.ObjectId('6116bf9e1c964e29788db56a'.toString())
-      )
-      return res.status(status.OK).send(retorno)
-    } catch (error: any) {
-      return res.status(400).send(error.message)
+    if (userId) {
+      try {
+        const retorno = await this.schedulesService.get(
+          Types.ObjectId(userId.toString())
+        )
+        return res.status(status.OK).send(retorno)
+      } catch (error: any) {
+        return res.status(400).send(error.message)
+      }
     }
+
+    return null
   }
 
   async save(req: Request, res: Response) {
-    const { employeeId, serviceId, userId, dataSchedule, time } = req.body
+    const { employeeId, serviceId, userId, dataSchedule, time, price } =
+      req.body
 
     const parameters: ICreate = {
       employeeId,
@@ -50,6 +55,7 @@ export class SchedulesController {
       userId,
       dataSchedule,
       time,
+      price,
     }
 
     try {
