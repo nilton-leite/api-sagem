@@ -23,7 +23,10 @@ export default async ({
 
   // Users routes
   router.post('/users', usersController.create.bind(usersController))
-  // router.get('/users', usersController.find.bind(usersController))
+  router.get(
+    '/user/validate',
+    usersController.validateRegister.bind(usersController)
+  )
 
   router.post(
     '/employees',

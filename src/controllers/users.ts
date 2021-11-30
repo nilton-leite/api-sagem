@@ -3,7 +3,7 @@ import status from 'http-status'
 import Container from 'src/configs/ioc'
 import { Logger } from 'winston'
 import { IUsersService } from '@src/services/users'
-import { ICreate } from '@src/utils/types/models/users'
+import { ICreate, IFindOne } from '@src/utils/types/models/users'
 
 export class UsersController {
   private logger: Logger
@@ -19,12 +19,26 @@ export class UsersController {
 
     let parameters: ICreate = {
       full_name: full_name,
-      cpf: cpf,
       telephone: telephone,
       email: email,
     }
 
     const retorno = await this.usersService.create({ data: parameters })
     return res.status(status.OK).send(retorno)
+  }
+
+  public async validateRegister(req: Request, res: Response) {
+    const { email } = req.query
+    let mensagem: any = { status: true, message: 'Disponível para cadastro!' }
+
+    if (email) {
+      const param: IFindOne = { email: email.toString() }
+      const retorno = await this.usersService.validateRegister({ data: param })
+
+      if (retorno !== null)
+        mensagem = { status: false, message: 'E-mail já cadastrado!' }
+    }
+
+    return res.status(status.OK).send(mensagem)
   }
 }
