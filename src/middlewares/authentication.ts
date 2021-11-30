@@ -21,7 +21,9 @@ function AuthenticationMiddleware(nodeEnv: string) {
     console.log(path)
 
     if (
-      (path.includes('/login') || path.includes('/users')) &&
+      (path.includes('/login') ||
+        path.includes('/users') ||
+        path.includes('/user/validate')) &&
       method === 'POST'
     ) {
       return next()
