@@ -46,13 +46,12 @@ export class SchedulesController {
   }
 
   async save(req: Request, res: Response) {
-    const { employeeId, serviceId, userId, dataSchedule, time, price } =
-      req.body
-
+    const { employeeId, serviceId, dataSchedule, time, price } = req.body
+    const { id } = req.body
     const parameters: ICreate = {
       employeeId,
       serviceId,
-      userId,
+      id,
       dataSchedule,
       time,
       price,
