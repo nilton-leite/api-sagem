@@ -74,6 +74,11 @@ export class UsersController {
       auth: false,
       token: null,
       message: 'Nenhum usuário encontrado com o email informado!',
+      fullName: null,
+      telephone: null,
+      tokenFirebase: null,
+      tokenFacebook: null,
+      tokenGoogle: null,
     }
     if (email && tokenFirebase) {
       const param: IFindOneLogin = {
@@ -88,6 +93,11 @@ export class UsersController {
           auth: true,
           token: token,
           message: 'Login realizado com sucesso!',
+          fullName: retorno.full_name,
+          telephone: retorno.telephone,
+          tokenFirebase: retorno.token_firebase,
+          tokenFacebook: retorno.token_facebook,
+          tokenGoogle: retorno.token_google,
         }
       }
     }
