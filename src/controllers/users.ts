@@ -15,12 +15,22 @@ export class UsersController {
   }
 
   public async create(req: Request, res: Response) {
-    const { full_name, cpf, telephone, email } = req.body
+    const {
+      full_name,
+      telephone,
+      email,
+      tokenFirebase,
+      tokenFacebook,
+      tokenGoogle,
+    } = req.body
 
     let parameters: ICreate = {
       full_name: full_name,
       telephone: telephone,
       email: email,
+      token_firebase: tokenFirebase,
+      token_facebook: tokenFacebook,
+      token_google: tokenGoogle,
     }
 
     const retorno = await this.usersService.create({ data: parameters })
