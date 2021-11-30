@@ -34,7 +34,12 @@ export class UsersController {
     }
 
     const retorno = await this.usersService.create({ data: parameters })
-    return res.status(status.OK).send(retorno)
+    return res.status(status.OK).send({
+      _id: retorno._id,
+      full_name: retorno.full_name,
+      telephone: retorno.telephone,
+      email: retorno.email,
+    })
   }
 
   public async validateRegister(req: Request, res: Response) {
