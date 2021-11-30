@@ -51,7 +51,7 @@ export class SchedulesController {
     const parameters: ICreate = {
       employeeId,
       serviceId,
-      id,
+      userId: id,
       dataSchedule,
       time,
       price,

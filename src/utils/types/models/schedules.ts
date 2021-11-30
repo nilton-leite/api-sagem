@@ -2,7 +2,7 @@ import { Document, Types } from 'mongoose'
 
 export interface ICreate {
   employeeId: Types.ObjectId
-  id: Types.ObjectId
+  userId: Types.ObjectId
   serviceId: Types.ObjectId
   dataSchedule: String
   time: String
