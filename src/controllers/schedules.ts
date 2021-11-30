@@ -29,12 +29,12 @@ export class SchedulesController {
   }
 
   async get(req: Request, res: Response) {
-    const { userId } = req.query
+    const { id } = req.body
 
-    if (userId) {
+    if (id) {
       try {
         const retorno = await this.schedulesService.get(
-          Types.ObjectId(userId.toString())
+          Types.ObjectId(id.toString())
         )
         return res.status(status.OK).send(retorno)
       } catch (error: any) {
@@ -68,6 +68,7 @@ export class SchedulesController {
 
   public async find(req: Request, res: Response) {
     const { start_date, end_date, serviceId, employeeId } = req.query
+    const { id } = req.body
 
     const intervalDate: any[] = []
     const intervalHours: any[] = []
@@ -119,7 +120,7 @@ export class SchedulesController {
           async (itemInterval: any, indexDate: number) => {
             let schedule = await this.schedulesService.getByDate({
               data: {
-                userId: Types.ObjectId('6116bf9e1c964e29788db56a'.toString()),
+                userId: Types.ObjectId(id.toString()),
                 employeeId: Types.ObjectId(employeeId.toString()),
                 serviceId: Types.ObjectId(serviceId.toString()),
                 dataSchedule: itemInterval.date,
