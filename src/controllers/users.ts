@@ -39,6 +39,9 @@ export class UsersController {
       full_name: retorno.full_name,
       telephone: retorno.telephone,
       email: retorno.email,
+      tokenFirebase: retorno.token_firebase,
+      tokenFacebook: retorno.token_facebook,
+      tokenGoogle: retorno.token_google,
     })
   }
 
