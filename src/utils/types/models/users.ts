@@ -10,3 +10,7 @@ export interface ICreate {
 export interface IFindOne {
   email: string
 }
+export interface IFindOneLogin {
+  email: string
+  token_firebase: string
+}

@@ -2,8 +2,15 @@ import { Request, Response } from 'express'
 import status from 'http-status'
 import Container from 'src/configs/ioc'
 import { Logger } from 'winston'
+import dotenv from 'dotenv'
+import jsonwebtoken from 'jsonwebtoken'
 import { IUsersService } from '@src/services/users'
-import { ICreate, IFindOne } from '@src/utils/types/models/users'
+import { ICreate, IFindOne, IFindOneLogin } from '@src/utils/types/models/users'
+
+const envFound = dotenv.config()
+if (!envFound) {
+  throw new Error('.env file not found')
+}
 
 export class UsersController {
   private logger: Logger
@@ -58,5 +65,33 @@ export class UsersController {
     }
 
     return res.status(status.OK).send(mensagem)
+  }
+
+  public async login(req: Request, res: Response) {
+    const { email, tokenFirebase } = req.body
+    let token: String
+    let result: any = {
+      auth: false,
+      token: null,
+      message: 'Nenhum usuário encontrado com o email informado!',
+    }
+    if (email && tokenFirebase) {
+      const param: IFindOneLogin = {
+        email: email.toString(),
+        token_firebase: tokenFirebase.toString(),
+      }
+      const retorno = await this.usersService.validateLogin({ data: param })
+
+      if (retorno !== null) {
+        token = jsonwebtoken.sign({ id: retorno._id }, `${process.env.SECRET}`)
+        result = {
+          auth: true,
+          token: token,
+          message: 'Login realizado com sucesso!',
+        }
+      }
+    }
+
+    return res.json(result)
   }
 }

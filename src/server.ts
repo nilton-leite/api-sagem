@@ -59,7 +59,7 @@ export class Server {
     )
     this.app.use(bodyParser.json({ type: '*/*', limit: '50mb' }))
     this.app.use(bodyParser.urlencoded({ extended: false }))
-    // this.app.use(AuthenticationMiddleware(this.logType))
+    this.app.use(AuthenticationMiddleware(this.logType))
     if (this.logType === 'dev') this.app.use(cors())
   }
 

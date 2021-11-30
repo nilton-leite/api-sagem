@@ -27,6 +27,7 @@ export default async ({
     '/user/validate',
     usersController.validateRegister.bind(usersController)
   )
+  router.post('/login', usersController.login.bind(usersController))
 
   router.post(
     '/employees',

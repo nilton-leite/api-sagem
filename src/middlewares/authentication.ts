@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { UNAUTHORIZED } from 'http-status'
+import jsonwebtoken from 'jsonwebtoken'
 
 export interface IAuthenticatedUserInterface {
   userId: string
@@ -16,32 +17,39 @@ function AuthenticationMiddleware(nodeEnv: string) {
     // return next()
     // }
 
-    if (path.includes('/healthcheck') || path.includes('/api-docs')) {
+    console.log(method)
+    console.log(path)
+
+    if (
+      (path.includes('/login') || path.includes('/users')) &&
+      method === 'POST'
+    ) {
       return next()
     }
 
     if (!authorization) {
-      console.log('Entrei aqui')
       res.status(UNAUTHORIZED).json({ message: 'Missing authorization header' })
       return
     }
 
-    const userId = getUserIdFromToken(authorization)
-    if (userId === null) {
+    const id = getUserIdFromToken(authorization)
+    if (id === null) {
       res.status(UNAUTHORIZED).json({ message: 'Token inválido' })
       return
     }
 
-    req.params.userId = userId
-    req.body.userId = userId
+    req.params.id = id
+    req.body.id = id
     next()
   }
 }
 
 function getUserIdFromToken(token: string): string | null {
-  const buff = Buffer.from(token.split('.')[1], 'base64')
   try {
-    return JSON.parse(buff.toString()).sub
+    var decoded: any = jsonwebtoken.verify(token, `${process.env.SECRET}`)
+    console.log('decoded')
+
+    return decoded.id
   } catch (_) {
     return null
   }
