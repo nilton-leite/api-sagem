@@ -25,6 +25,18 @@ export const SchedulesRepository = ({}: Container): ISchedulesRepository => {
       return item
     },
     get: async (userId: Types.ObjectId, text: String | null) => {
+      let filter: any = {}
+      if (text) {
+        filter = {
+          $or: [
+            {
+              'employees.full_name': {
+                $regex: new RegExp(`.*${text}.*`, 'i'),
+              },
+            },
+          ],
+        }
+      }
       const item = await SchedulesModel.aggregate([
         { $match: { userId } },
         {
@@ -37,15 +49,7 @@ export const SchedulesRepository = ({}: Container): ISchedulesRepository => {
         },
         { $unwind: '$employees' },
         {
-          $match: {
-            $or: [
-              {
-                'employees.full_name': {
-                  $regex: new RegExp(`.*${text}.*`, 'i'),
-                },
-              },
-            ],
-          },
+          $match: filter,
         },
         {
           $lookup: {
