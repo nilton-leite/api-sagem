@@ -5,7 +5,11 @@ import { Document, Types } from 'mongoose'
 export interface ISchedulesService {
   create(params: { data: ICreate }): Promise<any>
   getByDate(params: { data: IGet }): Promise<any>
-  get(userId: Types.ObjectId, text: any, serviceId: any): Promise<any>
+  get(
+    userId: Types.ObjectId,
+    text: any,
+    serviceId?: Types.ObjectId | null
+  ): Promise<any>
 }
 
 export const SchedulesService = ({

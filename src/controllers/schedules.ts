@@ -33,12 +33,17 @@ export class SchedulesController {
     const { id } = req.body
     const { text, serviceId } = req.query
 
+    let serviceIdAux = null
+    if (serviceId) {
+      serviceIdAux = Types.ObjectId(serviceId.toString())
+    }
+
     if (id) {
       try {
         const retorno = await this.schedulesService.get(
           Types.ObjectId(id.toString()),
           text,
-          Types.ObjectId(serviceId?.toString())
+          serviceIdAux
         )
         return res.status(status.OK).send(retorno)
       } catch (error: any) {
