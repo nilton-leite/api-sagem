@@ -23,6 +23,7 @@ export class MongoDB {
         useNewUrlParser: true,
         useUnifiedTopology: true,
       })
+      mongoose.set('debug', true)
     } else {
       const ca = [fs.readFileSync('/etc/ssl/ca.pem')]
       const cert = fs.readFileSync('/etc/ssl/cert.pem')

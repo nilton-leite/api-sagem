@@ -1,12 +1,12 @@
 import Container from '@src/configs/ioc'
 import SchedulesModel from '@src/models/schedules'
 import { ICreate, IGet } from '@src/utils/types/models/schedules'
-import { Document, Types } from 'mongoose'
+import { Document, Types, set } from 'mongoose'
 
 export interface ISchedulesRepository {
   create(params: ICreate): Promise<any>
   getByDate(params: IGet): Promise<any>
-  get(userId: Types.ObjectId): Promise<any>
+  get(userId: Types.ObjectId, text: any): Promise<any>
 }
 
 export const SchedulesRepository = ({}: Container): ISchedulesRepository => {
@@ -24,7 +24,7 @@ export const SchedulesRepository = ({}: Container): ISchedulesRepository => {
       })
       return item
     },
-    get: async (userId: Types.ObjectId) => {
+    get: async (userId: Types.ObjectId, text: String | null) => {
       const item = await SchedulesModel.aggregate([
         { $match: { userId } },
         {
@@ -35,6 +35,18 @@ export const SchedulesRepository = ({}: Container): ISchedulesRepository => {
             as: 'employees',
           },
         },
+        { $unwind: '$employees' },
+        {
+          $match: {
+            $or: [
+              {
+                'employees.full_name': {
+                  $regex: new RegExp(`.*${text}.*`, 'i'),
+                },
+              },
+            ],
+          },
+        },
         {
           $lookup: {
             from: 'services',
@@ -43,6 +55,7 @@ export const SchedulesRepository = ({}: Container): ISchedulesRepository => {
             as: 'services',
           },
         },
+        { $unwind: '$services' },
         {
           $project: {
             _id: 1,

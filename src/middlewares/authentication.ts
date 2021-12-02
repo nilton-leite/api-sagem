@@ -13,12 +13,6 @@ function AuthenticationMiddleware(nodeEnv: string) {
       headers: { authorization },
       method,
     } = req
-    // if (nodeEnv === 'dev' && method === 'OPTIONS') {
-    // return next()
-    // }
-
-    console.log(method)
-    console.log(path)
 
     if (
       (path.includes('/login') ||
@@ -49,7 +43,6 @@ function AuthenticationMiddleware(nodeEnv: string) {
 function getUserIdFromToken(token: string): string | null {
   try {
     var decoded: any = jsonwebtoken.verify(token, `${process.env.SECRET}`)
-    console.log('decoded')
 
     return decoded.id
   } catch (_) {

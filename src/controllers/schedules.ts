@@ -9,6 +9,7 @@ import { Types } from 'mongoose'
 import moment from 'moment'
 import { parse } from 'date-fns'
 import { ICreate, IGet } from '@src/utils/types/models/schedules'
+import { toUndefined } from 'fp-ts/lib/Option'
 
 export class SchedulesController {
   private logger: Logger
@@ -30,11 +31,13 @@ export class SchedulesController {
 
   async get(req: Request, res: Response) {
     const { id } = req.body
+    const { text } = req.query
 
     if (id) {
       try {
         const retorno = await this.schedulesService.get(
-          Types.ObjectId(id.toString())
+          Types.ObjectId(id.toString()),
+          text
         )
         return res.status(status.OK).send(retorno)
       } catch (error: any) {
