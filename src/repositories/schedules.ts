@@ -88,6 +88,7 @@ export const SchedulesRepository = ({}: Container): ISchedulesRepository => {
             'employees.telephone': 1,
             'employees.email': 1,
             'employees.description': 1,
+            'services._id': 1,
             'services.title': 1,
             'services.description': 1,
             'services.icon': 1,

@@ -44,6 +44,38 @@ export class SchedulesController {
           text,
           serviceIdAux
         )
+
+        const getRetorno = retorno.map(async (itemPai: any, index: number) => {
+          let diferencaMilissegundos = moment(
+            retorno[index].dataSchedule + ' ' + retorno[index].time,
+            'DD/MM/YYYY HH:mm:ss'
+          ).diff(moment(moment(), 'DD/MM/YYYY HH:mm:ss'))
+          let dias = moment.duration(diferencaMilissegundos)
+          let diferencaHoras = Math.floor(dias.asHours())
+
+          const employee = await this.employeesService.findById({
+            data: {
+              _id: Types.ObjectId(retorno[index].employees._id),
+            },
+          })
+
+          const employeeService = employee.services.filter(function (
+            item: any
+          ) {
+            return (
+              item.serviceId.toString() ===
+              retorno[index].services._id.toString()
+            )
+          })
+
+          retorno[index].cancel = true
+          if (diferencaHoras <= employeeService[0].cancel_time) {
+            retorno[index].cancel = false
+          }
+          return true
+        })
+
+        await Promise.all(getRetorno)
         return res.status(status.OK).send(retorno)
       } catch (error: any) {
         return res.status(400).send(error.message)
@@ -86,33 +118,6 @@ export class SchedulesController {
         }
 
         schedule = await this.schedulesService.getById({ data: parameters })
-
-        let diferencaMilissegundos = moment(
-          schedule.dataSchedule + ' ' + schedule.time,
-          'DD/MM/YYYY HH:mm:ss'
-        ).diff(moment(moment(), 'DD/MM/YYYY HH:mm:ss'))
-        var dias = moment.duration(diferencaMilissegundos)
-        var diferencaHoras = Math.floor(dias.asHours())
-
-        const employee = await this.employeesService.findById({
-          data: {
-            _id: Types.ObjectId(schedule.employeeId.toString()),
-          },
-        })
-
-        const employeeService = employee.services.filter(function (item: any) {
-          return item.serviceId.toString() === schedule.serviceId.toString()
-        })
-
-        if (diferencaHoras <= employeeService[0].cancel_time) {
-          return res
-            .status(400)
-            .send({
-              status: false,
-              message:
-                'Horário limite para cancelamento ultrapassado, por favor entre em contato com o Bless!',
-            })
-        }
       }
 
       return res
