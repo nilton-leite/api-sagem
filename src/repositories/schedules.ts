@@ -6,7 +6,7 @@ import { Document, Types, set } from 'mongoose'
 export interface ISchedulesRepository {
   create(params: ICreate): Promise<any>
   getByDate(params: IGet): Promise<any>
-  get(userId: Types.ObjectId, text: any): Promise<any>
+  get(userId: Types.ObjectId, text: any, serviceId: any): Promise<any>
 }
 
 export const SchedulesRepository = ({}: Container): ISchedulesRepository => {
@@ -24,19 +24,24 @@ export const SchedulesRepository = ({}: Container): ISchedulesRepository => {
       })
       return item
     },
-    get: async (userId: Types.ObjectId, text: String | null) => {
+    get: async (
+      userId: Types.ObjectId,
+      text: String | null,
+      serviceId: any
+    ) => {
       let filter: any = {}
       if (text) {
         filter = {
-          $or: [
-            {
-              'employees.full_name': {
-                $regex: new RegExp(`.*${text}.*`, 'i'),
-              },
-            },
-          ],
+          'employees.full_name': {
+            $regex: new RegExp(`.*${text}.*`, 'i'),
+          },
         }
       }
+
+      if (serviceId) {
+        filter.serviceId = serviceId
+      }
+
       const item = await SchedulesModel.aggregate([
         { $match: { userId } },
         {
@@ -49,7 +54,7 @@ export const SchedulesRepository = ({}: Container): ISchedulesRepository => {
         },
         { $unwind: '$employees' },
         {
-          $match: filter,
+          $match: { $or: [filter] },
         },
         {
           $lookup: {

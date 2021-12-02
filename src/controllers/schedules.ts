@@ -31,13 +31,14 @@ export class SchedulesController {
 
   async get(req: Request, res: Response) {
     const { id } = req.body
-    const { text } = req.query
+    const { text, serviceId } = req.query
 
     if (id) {
       try {
         const retorno = await this.schedulesService.get(
           Types.ObjectId(id.toString()),
-          text
+          text,
+          Types.ObjectId(serviceId?.toString())
         )
         return res.status(status.OK).send(retorno)
       } catch (error: any) {
