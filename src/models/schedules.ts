@@ -7,6 +7,7 @@ export interface ISchedules extends Document {
   dataSchedule: String
   time: String
   price: Number
+  canceled?: Boolean
 }
 
 interface ISchedulesModels extends Model<ISchedules> {}
@@ -19,6 +20,7 @@ const schema = new Schema(
     dataSchedule: { type: String, required: true },
     time: { type: String, required: true },
     price: { type: Number, required: true },
+    canceled: { type: Boolean, required: true, default: false },
   },
   { collection: 'schedules', timestamps: { createdAt: 'dateInsert' } }
 )

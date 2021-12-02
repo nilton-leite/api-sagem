@@ -5,6 +5,7 @@ import { Document, Types, set } from 'mongoose'
 
 export interface ISchedulesRepository {
   create(params: ICreate): Promise<any>
+  cancel(scheduleId: Types.ObjectId, userId: Types.ObjectId): Promise<any>
   getByDate(params: IGet): Promise<any>
   getById(params: IGetId): Promise<any>
   get(
@@ -18,6 +19,13 @@ export const SchedulesRepository = ({}: Container): ISchedulesRepository => {
   return {
     create: async (params: ICreate) => {
       const item = await SchedulesModel.create(params)
+      return item
+    },
+    cancel: async (scheduleId: Types.ObjectId, userId: Types.ObjectId) => {
+      const item = await SchedulesModel.updateOne(
+        { _id: scheduleId, userId },
+        { $set: { canceled: true } }
+      )
       return item
     },
     getByDate: async (params: IGet) => {
@@ -54,7 +62,7 @@ export const SchedulesRepository = ({}: Container): ISchedulesRepository => {
       }
 
       const item = await SchedulesModel.aggregate([
-        { $match: { userId } },
+        { $match: { userId, canceled: false } },
         {
           $lookup: {
             from: 'employees',

@@ -4,6 +4,7 @@ import { Document, Types } from 'mongoose'
 
 export interface ISchedulesService {
   create(params: { data: ICreate }): Promise<any>
+  cancel(scheduleId: Types.ObjectId, userId: Types.ObjectId): Promise<any>
   getByDate(params: { data: IGet }): Promise<any>
   getById(params: { data: IGetId }): Promise<any>
   get(
@@ -19,6 +20,10 @@ export const SchedulesService = ({
   return {
     create: async (data) => {
       const saveData: any = await schedulesRepository.create(data.data)
+      return saveData
+    },
+    cancel: async (scheduleId, userId) => {
+      const saveData: any = await schedulesRepository.cancel(scheduleId, userId)
       return saveData
     },
     getByDate: async (data) => {

@@ -112,14 +112,9 @@ export class SchedulesController {
     try {
       if (scheduleId) {
         let idSchedule = Types.ObjectId(scheduleId.toString())
-        const parameters: any = {
-          scheduleId: idSchedule,
-          userId: id,
-        }
 
-        schedule = await this.schedulesService.getById({ data: parameters })
+        await this.schedulesService.cancel(idSchedule, id)
       }
-
       return res
         .status(status.OK)
         .send({ status: true, message: 'Agendamento cancelado com sucesso!' })
