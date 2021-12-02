@@ -39,12 +39,7 @@ export class SchedulesController {
           Types.ObjectId(id.toString()),
           text
         )
-
-        const services = await this.servicesService.find()
-        return res.status(status.OK).send({
-          retorno,
-          services,
-        })
+        return res.status(status.OK).send(retorno)
       } catch (error: any) {
         return res.status(400).send(error.message)
       }
