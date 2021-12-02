@@ -14,3 +14,8 @@ export interface IGet {
   employeeId: Types.ObjectId
   dataSchedule: String
 }
+
+export interface IGetId {
+  scheduleId: Types.ObjectId
+  userId: Types.ObjectId
+}

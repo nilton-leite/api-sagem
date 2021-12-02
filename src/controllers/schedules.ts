@@ -7,9 +7,8 @@ import { IEmployeesService } from '@src/services/employees'
 import { IServicesService } from '@src/services/services'
 import { Types } from 'mongoose'
 import moment from 'moment'
-import { parse } from 'date-fns'
-import { ICreate, IGet } from '@src/utils/types/models/schedules'
-import { toUndefined } from 'fp-ts/lib/Option'
+import { ICreate, IGetId } from '@src/utils/types/models/schedules'
+import { throws } from 'assert'
 
 export class SchedulesController {
   private logger: Logger
@@ -74,6 +73,56 @@ export class SchedulesController {
     }
   }
 
+  async cancel(req: Request, res: Response) {
+    const { scheduleId } = req.query
+    const { id } = req.body
+    let schedule: any
+    try {
+      if (scheduleId) {
+        let idSchedule = Types.ObjectId(scheduleId.toString())
+        const parameters: any = {
+          scheduleId: idSchedule,
+          userId: id,
+        }
+
+        schedule = await this.schedulesService.getById({ data: parameters })
+
+        let diferencaMilissegundos = moment(
+          schedule.dataSchedule + ' ' + schedule.time,
+          'DD/MM/YYYY HH:mm:ss'
+        ).diff(moment(moment(), 'DD/MM/YYYY HH:mm:ss'))
+        var dias = moment.duration(diferencaMilissegundos)
+        var diferencaHoras = Math.floor(dias.asHours())
+
+        const employee = await this.employeesService.findById({
+          data: {
+            _id: Types.ObjectId(schedule.employeeId.toString()),
+          },
+        })
+
+        const employeeService = employee.services.filter(function (item: any) {
+          return item.serviceId.toString() === schedule.serviceId.toString()
+        })
+
+        if (diferencaHoras <= employeeService[0].cancel_time) {
+          return res
+            .status(400)
+            .send({
+              status: false,
+              message:
+                'Horário limite para cancelamento ultrapassado, por favor entre em contato com o Bless!',
+            })
+        }
+      }
+
+      return res
+        .status(status.OK)
+        .send({ status: true, message: 'Agendamento cancelado com sucesso!' })
+    } catch (error: any) {
+      return res.status(400).send(error.message)
+    }
+  }
+
   public async find(req: Request, res: Response) {
     const { start_date, end_date, serviceId, employeeId } = req.query
     const { id } = req.body
@@ -95,7 +144,7 @@ export class SchedulesController {
           _id: Types.ObjectId(employeeId.toString()),
         },
       })
-      console.log(employee)
+
       if (employee === null) {
         return res.status(400).send('Não encontramos nenhum funcionário!')
       }

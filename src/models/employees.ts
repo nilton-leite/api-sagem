@@ -15,6 +15,7 @@ export interface IEmployees extends Document {
     serviceId: ReturnType<typeof Types.ObjectId>
     price: Number
     execution_time: Number
+    cancel_time: Number
   }[]
 }
 
@@ -41,6 +42,7 @@ const schema = new Schema(
         },
         price: { type: Number, required: false },
         execution_time: { type: Number, required: false },
+        cancel_time: { type: Number, required: false },
       },
     ],
   },
