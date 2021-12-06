@@ -6,6 +6,7 @@ import dotenv from 'dotenv'
 import jsonwebtoken from 'jsonwebtoken'
 import { IUsersService } from '@src/services/users'
 import { ICreate, IFindOne, IFindOneLogin } from '@src/utils/types/models/users'
+import { Types } from 'mongoose'
 
 const envFound = dotenv.config()
 if (!envFound) {
@@ -105,5 +106,21 @@ export class UsersController {
     }
 
     return res.json(result)
+  }
+
+  async get(req: Request, res: Response) {
+    const { id } = req.body
+
+    try {
+      if (id) {
+        const retorno = await this.usersService.get(Types.ObjectId(id))
+
+        return res.json([retorno])
+      }
+
+      return res.json([])
+    } catch (error: any) {
+      return res.status(400).send(error.message)
+    }
   }
 }
