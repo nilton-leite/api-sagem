@@ -11,7 +11,8 @@ export interface ISchedulesRepository {
   get(
     userId: Types.ObjectId,
     text: any,
-    serviceId?: Types.ObjectId | null
+    serviceId?: Types.ObjectId | null,
+    cancel?: Boolean | null
   ): Promise<any>
 }
 
@@ -47,9 +48,11 @@ export const SchedulesRepository = ({}: Container): ISchedulesRepository => {
     get: async (
       userId: Types.ObjectId,
       text: String | null,
-      serviceId: Types.ObjectId
+      serviceId: Types.ObjectId,
+      cancel: Boolean | null
     ) => {
       let filter: any = {}
+      let match: any = { userId: userId }
       if (text) {
         filter = {
           'employees.full_name': {
@@ -61,8 +64,12 @@ export const SchedulesRepository = ({}: Container): ISchedulesRepository => {
         filter.serviceId = serviceId
       }
 
+      if (cancel) {
+        match.canceled = false
+      }
+
       const item = await SchedulesModel.aggregate([
-        { $match: { userId, canceled: false } },
+        { $match: match },
         {
           $lookup: {
             from: 'employees',

@@ -30,7 +30,7 @@ export class SchedulesController {
 
   async get(req: Request, res: Response) {
     const { id } = req.body
-    const { text, serviceId } = req.query
+    const { text, serviceId, cancel } = req.query
 
     let serviceIdAux = null
     if (serviceId) {
@@ -42,7 +42,8 @@ export class SchedulesController {
         const retorno = await this.schedulesService.get(
           Types.ObjectId(id.toString()),
           text,
-          serviceIdAux
+          serviceIdAux,
+          cancel
         )
 
         const getRetorno = retorno.map(async (itemPai: any, index: number) => {

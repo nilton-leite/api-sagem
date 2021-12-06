@@ -10,7 +10,8 @@ export interface ISchedulesService {
   get(
     userId: Types.ObjectId,
     text: any,
-    serviceId?: Types.ObjectId | null
+    serviceId?: Types.ObjectId | null,
+    cancel?: Boolean | any
   ): Promise<any>
 }
 
@@ -34,11 +35,12 @@ export const SchedulesService = ({
       const getData: any = await schedulesRepository.getById(data.data)
       return getData
     },
-    get: async (userId, text, serviceId) => {
+    get: async (userId, text, serviceId, cancel) => {
       const getData: any = await schedulesRepository.get(
         userId,
         text,
-        serviceId
+        serviceId,
+        cancel
       )
       return getData
     },
