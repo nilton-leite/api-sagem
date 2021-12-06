@@ -127,7 +127,7 @@ export class SchedulesController {
     const { start_date, end_date, serviceId, employeeId } = req.query
     const { id } = req.body
 
-    if (start_date == null || end_date == null)
+    if (start_date == 'null' || end_date == 'null')
       return res.status(status.OK).send([])
 
     const intervalDate: any[] = []
