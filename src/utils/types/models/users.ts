@@ -7,6 +7,10 @@ export interface ICreate {
   token_google?: string
 }
 
+export interface IUpdate {
+  full_name: string
+  telephone: string
+}
 export interface IFindOne {
   email: string
 }

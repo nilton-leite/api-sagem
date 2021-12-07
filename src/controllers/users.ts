@@ -5,7 +5,12 @@ import { Logger } from 'winston'
 import dotenv from 'dotenv'
 import jsonwebtoken from 'jsonwebtoken'
 import { IUsersService } from '@src/services/users'
-import { ICreate, IFindOne, IFindOneLogin } from '@src/utils/types/models/users'
+import {
+  ICreate,
+  IFindOne,
+  IFindOneLogin,
+  IUpdate,
+} from '@src/utils/types/models/users'
 import { Types } from 'mongoose'
 
 const envFound = dotenv.config()
@@ -51,6 +56,19 @@ export class UsersController {
       tokenFacebook: retorno.token_facebook,
       tokenGoogle: retorno.token_google,
     })
+  }
+
+  public async update(req: Request, res: Response) {
+    const { full_name, telephone, email, id } = req.body
+
+    let parameters: IUpdate = {
+      full_name: full_name,
+      telephone: telephone,
+    }
+
+    await this.usersService.updateOne({ data: parameters }, Types.ObjectId(id))
+    const retorno = await this.usersService.get(Types.ObjectId(id))
+    return res.status(status.OK).send(retorno)
   }
 
   public async validateRegister(req: Request, res: Response) {
