@@ -13,6 +13,10 @@ export interface IUsersService {
   get(userId: Types.ObjectId): Promise<any>
   validateRegister(params: { data: IFindOne }): Promise<any>
   validateLogin(params: { data: IFindOneLogin }): Promise<any>
+  updateTokenFirebaseMessaging(
+    userId: Types.ObjectId,
+    tokenFirebaseMessaging: String
+  ): Promise<any>
 }
 
 export const UsersService = ({ usersRepository }: Container): IUsersService => {
@@ -35,6 +39,13 @@ export const UsersService = ({ usersRepository }: Container): IUsersService => {
     },
     get: async (userId) => {
       const getData: any = await usersRepository.get(userId)
+      return getData
+    },
+    updateTokenFirebaseMessaging: async (userId, tokenFirebaseMessaging) => {
+      const getData: any = await usersRepository.updateTokenFirebaseMessaging(
+        userId,
+        tokenFirebaseMessaging
+      )
       return getData
     },
   }

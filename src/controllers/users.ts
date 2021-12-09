@@ -32,6 +32,7 @@ export class UsersController {
       full_name,
       telephone,
       email,
+      tokenFirebaseMessaging,
       tokenFirebase,
       tokenFacebook,
       tokenGoogle,
@@ -41,6 +42,7 @@ export class UsersController {
       full_name: full_name,
       telephone: telephone,
       email: email,
+      token_firebase_messaging: tokenFirebaseMessaging,
       token_firebase: tokenFirebase,
       token_facebook: tokenFacebook,
       token_google: tokenGoogle,
@@ -52,6 +54,7 @@ export class UsersController {
       full_name: retorno.full_name,
       telephone: retorno.telephone,
       email: retorno.email,
+      tokenFirebaseMessaging: retorno.token_firebase_messaging,
       tokenFirebase: retorno.token_firebase,
       tokenFacebook: retorno.token_facebook,
       tokenGoogle: retorno.token_google,
@@ -87,7 +90,7 @@ export class UsersController {
   }
 
   public async login(req: Request, res: Response) {
-    const { email, tokenFirebase } = req.body
+    const { email, tokenFirebase, tokenFirebaseMessaging } = req.body
     let token: String
     let result: any = {
       auth: false,
@@ -108,6 +111,14 @@ export class UsersController {
       const retorno = await this.usersService.validateLogin({ data: param })
 
       if (retorno !== null) {
+        if (!retorno.token_firebase_messaging) {
+          await this.usersService.updateTokenFirebaseMessaging(
+            retorno._id,
+            tokenFirebaseMessaging
+          )
+          retorno.token_firebase_messaging = tokenFirebaseMessaging
+        }
+
         token = jsonwebtoken.sign({ id: retorno._id }, `${process.env.SECRET}`)
         result = {
           auth: true,
@@ -116,6 +127,7 @@ export class UsersController {
           id: retorno._id,
           fullName: retorno.full_name,
           telephone: retorno.telephone,
+          tokenFirebaseMessaging: retorno.token_firebase_messaging,
           tokenFirebase: retorno.token_firebase,
           tokenFacebook: retorno.token_facebook,
           tokenGoogle: retorno.token_google,
