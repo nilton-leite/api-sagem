@@ -8,6 +8,7 @@ import { UsersController } from './controllers/users'
 import { EmployeesController } from './controllers/employees'
 import { ServicesController } from './controllers/services'
 import { SchedulesController } from './controllers/schedules'
+import { NotificationController } from './controllers/notification'
 import AuthenticationMiddleware from './middlewares/authentication'
 import cors from 'cors'
 
@@ -19,6 +20,7 @@ export class Server {
   private employeesController: EmployeesController
   private servicesController: ServicesController
   private schedulesController: SchedulesController
+  private notificationController: NotificationController
   private logger: Logger
 
   constructor({
@@ -29,6 +31,7 @@ export class Server {
     employeesController,
     servicesController,
     schedulesController,
+    notificationController,
     logger,
   }: Container) {
     this.app = app
@@ -39,6 +42,7 @@ export class Server {
     this.employeesController = employeesController
     this.servicesController = servicesController
     this.schedulesController = schedulesController
+    this.notificationController = notificationController
     this.logger = logger
   }
 
@@ -69,6 +73,7 @@ export class Server {
       employeesController: this.employeesController,
       servicesController: this.servicesController,
       schedulesController: this.schedulesController,
+      notificationController: this.notificationController,
     })
 
     this.app.use(router)

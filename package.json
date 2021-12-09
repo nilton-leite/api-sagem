@@ -25,6 +25,7 @@
     "date-fns": "^2.26.0",
     "express": "^4.17.1",
     "express-validator": "^6.10.0",
+    "firebase-admin": "^10.0.0",
     "fp-ts": "^2.9.5",
     "http-status": "^1.5.0",
     "jsonwebtoken": "^8.5.1",

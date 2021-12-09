@@ -5,12 +5,14 @@ import { UsersController } from './controllers/users'
 import { EmployeesController } from './controllers/employees'
 import { ServicesController } from './controllers/services'
 import { SchedulesController } from './controllers/schedules'
+import { NotificationController } from './controllers/notification'
 
 interface Controllers {
   usersController: UsersController
   employeesController: EmployeesController
   servicesController: ServicesController
   schedulesController: SchedulesController
+  notificationController: NotificationController
 }
 
 export default async ({
@@ -18,6 +20,7 @@ export default async ({
   employeesController,
   servicesController,
   schedulesController,
+  notificationController,
 }: Controllers) => {
   const router = Router()
 
@@ -51,6 +54,11 @@ export default async ({
   )
   router.get('/user', usersController.get.bind(usersController))
   router.put('/user', usersController.update.bind(usersController))
+
+  router.post(
+    '/firebase/notification',
+    notificationController.send.bind(notificationController)
+  )
 
   return router
 }
