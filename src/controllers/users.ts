@@ -111,7 +111,10 @@ export class UsersController {
       const retorno = await this.usersService.validateLogin({ data: param })
 
       if (retorno !== null) {
-        if (!retorno.token_firebase_messaging) {
+        if (
+          !retorno.token_firebase_messaging ||
+          retorno.token_firebase_messaging !== tokenFirebaseMessaging
+        ) {
           await this.usersService.updateTokenFirebaseMessaging(
             retorno._id,
             tokenFirebaseMessaging
