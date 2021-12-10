@@ -44,7 +44,7 @@ export class NotificationController {
         timeToLive: 60 * 60 * 24,
       }
       const rest: any = await this.sendNotification(
-        '456465465465465465464654',
+        retorno.token_firebase_messaging,
         title,
         body,
         notification_options
@@ -83,8 +83,15 @@ export class NotificationController {
         .messaging()
         .sendToDevice(registrationToken, message_notification, options)
         .then((response: any) => {
-          resolve({ status: true, error: null, response: response })
-          //   return { status: true, error: null, response: response }
+          if (response.results[0].error) {
+            resolve({
+              status: false,
+              error: response.results[0].error.errorInfo.message,
+              response: response,
+            })
+          } else {
+            resolve({ status: true, error: null, response: response })
+          }
         })
         .catch((error: any) => {
           resolve({ status: false, error: error })
