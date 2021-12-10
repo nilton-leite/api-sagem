@@ -58,3 +58,6 @@ dist
 # Oracle DB
 instantclient_12_2
 instantclient-basic-windows.x64-12.2.0.1.0.zip
+
+#firebase
+sagem-serviceAccount.json
