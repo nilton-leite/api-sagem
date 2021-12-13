@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import cron from 'node-cron'
 
 // Controllers
 import { UsersController } from './controllers/users'
@@ -59,6 +60,12 @@ export default async ({
     '/firebase/notification',
     notificationController.send.bind(notificationController)
   )
+
+  // Roda todo dia as 06 da manhã - Exclui todos os agendamentos que passaram da data
+  cron.schedule('0 6 * * *', () => schedulesController.cancelSchedules())
+
+  // Roda todo dia as 08 da manhã, mandando notificação pedindo para confirmar o agendamento
+  cron.schedule('0 8 * * *', () => schedulesController.confirmSchedule())
 
   return router
 }

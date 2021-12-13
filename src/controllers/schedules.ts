@@ -9,23 +9,83 @@ import { Types } from 'mongoose'
 import moment from 'moment'
 import { ICreate, IGetId } from '@src/utils/types/models/schedules'
 import { throws } from 'assert'
+import { NotificationController } from './notification'
+import { IUsersService } from '@src/services/users'
 
 export class SchedulesController {
   private logger: Logger
   private schedulesService: ISchedulesService
   private employeesService: IEmployeesService
   private servicesService: IServicesService
+  private usersService: IUsersService
+  private notificationController: NotificationController
 
   constructor({
     logger,
     schedulesService,
     employeesService,
     servicesService,
+    usersService,
+    notificationController,
   }: Container) {
     this.logger = logger
     this.schedulesService = schedulesService
     this.employeesService = employeesService
     this.servicesService = servicesService
+    this.usersService = usersService
+    this.notificationController = notificationController
+  }
+
+  public async cancelSchedules() {
+    let date = moment(new Date(), 'DD-MM-YYYY')
+    let currentDate = moment(date).format('YYYY-MM-DD')
+    const retorno = await this.schedulesService.getByCancel({
+      data: { dataSchedule: new Date(currentDate) },
+    })
+    if (retorno.length > 0) {
+      const cancelSchedules = retorno.map(async (item: any, index: number) => {
+        await this.schedulesService.cancel(
+          Types.ObjectId(item._id),
+          Types.ObjectId(item.userId)
+        )
+
+        return true
+      })
+
+      await Promise.all(cancelSchedules)
+    }
+  }
+
+  public async confirmSchedule() {
+    let date = moment(new Date(), 'DD-MM-YYYY')
+    let currentDate = moment(date).format('YYYY-MM-DD')
+
+    const retorno = await this.schedulesService.getAllByDate({
+      data: { dataSchedule: new Date(currentDate) },
+    })
+
+    const notification_options = {
+      priority: 'high',
+      timeToLive: 60 * 60 * 24,
+    }
+
+    if (retorno.length > 0) {
+      const sendNotification = retorno.map(async (item: any, index: number) => {
+        const user = await this.usersService.get(Types.ObjectId(item.userId))
+
+        let title: string = `Olá, ${item.employees.full_name}`
+        let body: string = `Clique aqui e confirme seu agendamento com a Studio Bless para o dia de hoje ás ${item.time}`
+
+        this.notificationController.sendNotification(
+          user.token_firebase_messaging,
+          title,
+          body,
+          notification_options
+        )
+      })
+
+      await Promise.all(sendNotification)
+    }
   }
 
   async get(req: Request, res: Response) {
@@ -89,11 +149,13 @@ export class SchedulesController {
   async save(req: Request, res: Response) {
     const { employeeId, serviceId, dataSchedule, time, price } = req.body
     const { id } = req.body
+    let date = moment(dataSchedule, 'DD-MM-YYYY')
+    let dateFormat = moment(date).format('YYYY-MM-DD')
     const parameters: ICreate = {
       employeeId,
       serviceId,
       userId: id,
-      dataSchedule,
+      dataSchedule: new Date(dateFormat),
       time,
       price,
     }
@@ -135,8 +197,8 @@ export class SchedulesController {
     const intervalHours: any[] = []
     const intervalFinal: any[] = []
     if (employeeId && serviceId && start_date && end_date) {
-      let init_date: any = start_date
-      let end_dates: any = end_date
+      let init_date: any = moment(start_date.toString(), 'DD-MM-YYYY')
+      let end_dates: any = moment(end_date.toString(), 'DD-MM-YYYY')
 
       let startDate = moment(init_date).format('DD/MM/YYYY')
       let endDate = moment(end_dates).format('DD/MM/YYYY')
@@ -173,10 +235,6 @@ export class SchedulesController {
         })
 
         await Promise.all(getInterval)
-
-        let teste: any = intervalFinal
-
-        let hours: any = []
         const getHour = intervalFinal.map(
           async (itemInterval: any, indexDate: number) => {
             let schedule = await this.schedulesService.getByDate({
@@ -184,7 +242,11 @@ export class SchedulesController {
                 userId: Types.ObjectId(id.toString()),
                 employeeId: Types.ObjectId(employeeId.toString()),
                 serviceId: Types.ObjectId(serviceId.toString()),
-                dataSchedule: itemInterval.date,
+                dataSchedule: new Date(
+                  moment(moment(itemInterval.date, 'DD-MM-YYYY')).format(
+                    'YYYY-MM-DD'
+                  )
+                ),
               },
             })
             console.log('indice', indexDate)

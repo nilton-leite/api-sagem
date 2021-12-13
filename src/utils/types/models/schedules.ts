@@ -4,7 +4,7 @@ export interface ICreate {
   employeeId: Types.ObjectId
   userId: Types.ObjectId
   serviceId: Types.ObjectId
-  dataSchedule: String
+  dataSchedule: Date
   time: String
   price: Number
 }
@@ -12,7 +12,11 @@ export interface IGet {
   userId: Types.ObjectId
   serviceId: Types.ObjectId
   employeeId: Types.ObjectId
-  dataSchedule: String
+  dataSchedule: Date
+}
+
+export interface IGetAllByDate {
+  dataSchedule: Date
 }
 
 export interface IGetId {
