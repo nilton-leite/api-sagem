@@ -20,6 +20,11 @@ export class SchedulesController {
   private usersService: IUsersService
   private notificationController: NotificationController
 
+  private notification_options = {
+    priority: 'high',
+    timeToLive: 60 * 60 * 24,
+  }
+
   constructor({
     logger,
     schedulesService,
@@ -64,11 +69,6 @@ export class SchedulesController {
       data: { dataSchedule: new Date(currentDate) },
     })
 
-    const notification_options = {
-      priority: 'high',
-      timeToLive: 60 * 60 * 24,
-    }
-
     if (retorno.length > 0) {
       const sendNotification = retorno.map(async (item: any, index: number) => {
         const user = await this.usersService.get(Types.ObjectId(item.userId))
@@ -80,7 +80,7 @@ export class SchedulesController {
           user.token_firebase_messaging,
           title,
           body,
-          notification_options
+          this.notification_options
         )
       })
 
@@ -163,6 +163,19 @@ export class SchedulesController {
 
     try {
       const retorno = await this.schedulesService.create({ data: parameters })
+
+      const user = await this.usersService.get(Types.ObjectId(id))
+
+      let title: string = `Olá, ${user.full_name}`
+      let body: string = `Viemos avisar que seu agendamento foi realizado com sucesso para ${dataSchedule} ás ${time}.`
+
+      this.notificationController.sendNotification(
+        user.token_firebase_messaging,
+        title,
+        body,
+        this.notification_options
+      )
+
       return res.status(status.OK).send(retorno)
     } catch (error: any) {
       return res.status(400).send(error.message)
