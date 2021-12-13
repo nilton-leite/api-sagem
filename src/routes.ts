@@ -48,6 +48,10 @@ export default async ({
     '/schedules/cancel',
     schedulesController.cancel.bind(schedulesController)
   )
+  router.get(
+    '/schedules/confirm',
+    schedulesController.confirm.bind(schedulesController)
+  )
 
   router.get(
     '/schedulesUser',

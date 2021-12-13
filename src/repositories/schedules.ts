@@ -12,6 +12,7 @@ import { Document, Types, set } from 'mongoose'
 export interface ISchedulesRepository {
   create(params: ICreate): Promise<any>
   cancel(scheduleId: Types.ObjectId, userId: Types.ObjectId): Promise<any>
+  confirm(scheduleId: Types.ObjectId, userId: Types.ObjectId): Promise<any>
   getByCancel(params: IGetAllByDate): Promise<any>
   getAllByDate(params: IGetAllByDate): Promise<any>
   getByDate(params: IGet): Promise<any>
@@ -36,6 +37,15 @@ export const SchedulesRepository = ({}: Container): ISchedulesRepository => {
       const item = await SchedulesModel.updateOne(
         { _id: scheduleId, userId },
         { $set: { canceled: true, canceledAt: new Date(currentDate) } }
+      )
+      return item
+    },
+    confirm: async (scheduleId: Types.ObjectId, userId: Types.ObjectId) => {
+      let date = moment(new Date(), 'DD-MM-YYYY')
+      let currentDate = moment(date).format('YYYY-MM-DD')
+      const item = await SchedulesModel.updateOne(
+        { _id: scheduleId, userId },
+        { $set: { confirmed: true, confirmedAt: new Date(currentDate) } }
       )
       return item
     },

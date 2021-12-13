@@ -10,6 +10,7 @@ export interface ISchedules extends Document {
   canceled?: Boolean
   confirmed?: Boolean
   canceledAt?: Date
+  confirmedAt?: Date
 }
 
 interface ISchedulesModels extends Model<ISchedules> {}
@@ -25,6 +26,7 @@ const schema = new Schema(
     canceled: { type: Boolean, required: true, default: false },
     confirmed: { type: Boolean, required: true, default: false },
     canceledAt: { type: Date, required: false },
+    confirmedAt: { type: Date, required: false },
   },
   { collection: 'schedules', timestamps: { createdAt: 'dateInsert' } }
 )

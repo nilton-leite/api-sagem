@@ -187,6 +187,24 @@ export class SchedulesController {
     }
   }
 
+  async confirm(req: Request, res: Response) {
+    const { scheduleId } = req.query
+    const { id } = req.body
+    let schedule: any
+    try {
+      if (scheduleId) {
+        let idSchedule = Types.ObjectId(scheduleId.toString())
+
+        await this.schedulesService.confirm(idSchedule, id)
+      }
+      return res
+        .status(status.OK)
+        .send({ status: true, message: 'Agendamento confirmado com sucesso!' })
+    } catch (error: any) {
+      return res.status(400).send(error.message)
+    }
+  }
+
   public async find(req: Request, res: Response) {
     const { start_date, end_date, serviceId, employeeId } = req.query
     const { id } = req.body
