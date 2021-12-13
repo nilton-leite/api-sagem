@@ -197,8 +197,8 @@ export class SchedulesController {
     const intervalHours: any[] = []
     const intervalFinal: any[] = []
     if (employeeId && serviceId && start_date && end_date) {
-      let init_date: any = moment(start_date.toString(), 'DD-MM-YYYY')
-      let end_dates: any = moment(end_date.toString(), 'DD-MM-YYYY')
+      let init_date: any = moment(start_date.toString(), 'YYYY-MM-DD')
+      let end_dates: any = moment(end_date.toString(), 'YYYY-MM-DD')
 
       let startDate = moment(init_date).format('DD/MM/YYYY')
       let endDate = moment(end_dates).format('DD/MM/YYYY')
