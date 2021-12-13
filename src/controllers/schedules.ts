@@ -128,7 +128,8 @@ export class SchedulesController {
               retorno[index].services._id.toString()
             )
           })
-
+          console.log(diferencaHoras)
+          console.log(employeeService[0].cancel_time)
           retorno[index].cancel = true
           if (diferencaHoras <= employeeService[0].cancel_time) {
             retorno[index].cancel = false
