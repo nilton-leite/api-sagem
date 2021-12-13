@@ -176,7 +176,9 @@ export const SchedulesRepository = ({}: Container): ISchedulesRepository => {
         {
           $project: {
             _id: 1,
-            dataSchedule: 1,
+            dataSchedule: {
+              $dateToString: { format: '%d/%m/%Y', date: '$dataSchedule' },
+            },
             time: 1,
             price: 1,
             'employees._id': 1,
