@@ -24,7 +24,7 @@ const schema = new Schema(
     price: { type: Number, required: true },
     canceled: { type: Boolean, required: true, default: false },
     confirmed: { type: Boolean, required: true, default: false },
-    canceledAt: { type: Date, required: true },
+    canceledAt: { type: Date, required: false },
   },
   { collection: 'schedules', timestamps: { createdAt: 'dateInsert' } }
 )
