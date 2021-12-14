@@ -40,6 +40,17 @@ export class NotificationController {
     }
   }
 
+  public async get(req: Request, res: Response) {
+    const { id } = req.body
+
+    try {
+      const dates = await this.notificationService.getDate(Types.ObjectId(id))
+      return res.json(dates)
+    } catch (error) {
+      return res.json(error)
+    }
+  }
+
   public async send(req: Request, res: Response) {
     const { id, title, body } = req.body
 

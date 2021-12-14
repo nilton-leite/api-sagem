@@ -1,10 +1,10 @@
 import { Sent } from '@src/utils/types/models/notification'
-import { Document, Model, Schema, model } from 'mongoose'
+import { Document, Model, Schema, model, Types } from 'mongoose'
 
 export interface INotification extends Document {
   title: String
   body: String
-  userId: String
+  userId: Types.ObjectId
   sent: Sent
 }
 
@@ -14,7 +14,7 @@ const schema = new Schema(
   {
     title: { type: String, required: true },
     body: { type: String, required: true },
-    userId: { type: String, required: true },
+    userId: { type: Types.ObjectId, required: true },
     sent: {
       type: {
         results: {
