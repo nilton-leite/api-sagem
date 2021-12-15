@@ -22,11 +22,7 @@ export const NotificationRepository =
               userId: userId,
             },
           },
-          {
-            $sort: {
-              dateInsert: 1,
-            },
-          },
+
           {
             $group: {
               _id: {
@@ -53,7 +49,11 @@ export const NotificationRepository =
               },
             },
           },
-
+          {
+            $sort: {
+              _id: -1,
+            },
+          },
           {
             $project: {
               _id: 0,
