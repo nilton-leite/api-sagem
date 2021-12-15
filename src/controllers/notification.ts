@@ -67,7 +67,7 @@ export class NotificationController {
         body,
         notification_options
       )
-      console.log(rest)
+
       if (rest.status) {
         result = { status: true, message: 'Notificação enviada com sucesso!' }
         const parameters: ICreate = {

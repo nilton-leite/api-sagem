@@ -5,6 +5,7 @@ import { Logger } from 'winston'
 import { ISchedulesService } from '@src/services/schedules'
 import { IEmployeesService } from '@src/services/employees'
 import { IServicesService } from '@src/services/services'
+import { INotificationService } from '@src/services/notification'
 import { Types } from 'mongoose'
 import moment from 'moment'
 import { ICreate, IGetId } from '@src/utils/types/models/schedules'
@@ -19,6 +20,7 @@ export class SchedulesController {
   private servicesService: IServicesService
   private usersService: IUsersService
   private notificationController: NotificationController
+  private notificationService: INotificationService
 
   private notification_options = {
     priority: 'high',
@@ -32,12 +34,14 @@ export class SchedulesController {
     servicesService,
     usersService,
     notificationController,
+    notificationService,
   }: Container) {
     this.logger = logger
     this.schedulesService = schedulesService
     this.employeesService = employeesService
     this.servicesService = servicesService
     this.usersService = usersService
+    this.notificationService = notificationService
     this.notificationController = notificationController
   }
 
@@ -128,8 +132,7 @@ export class SchedulesController {
               retorno[index].services._id.toString()
             )
           })
-          console.log(diferencaHoras)
-          console.log(employeeService[0].cancel_time)
+
           retorno[index].cancel = true
           if (diferencaHoras <= employeeService[0].cancel_time) {
             retorno[index].cancel = false
@@ -169,12 +172,20 @@ export class SchedulesController {
       let title: string = `Olá, ${user.full_name}`
       let body: string = `Viemos avisar que seu agendamento foi realizado com sucesso para ${dataSchedule} ás ${time}.`
 
-      this.notificationController.sendNotification(
+      const rest: any = this.notificationController.sendNotification(
         user.token_firebase_messaging,
         title,
         body,
         this.notification_options
       )
+
+      const parametersNot: any = {
+        title,
+        body,
+        userId: Types.ObjectId(id),
+        sent: rest.response,
+      }
+      await this.notificationService.create({ data: parametersNot })
 
       return res.status(status.OK).send(retorno)
     } catch (error: any) {
