@@ -72,20 +72,54 @@ export const NotificationRepository =
               _id: -1,
             },
           },
-          { $skip: params.page },
-          { $limit: params.pageLength },
           {
-            $project: {
-              _id: 1,
-              title: 1,
-              body: 1,
-              dateInsert: 1,
+            $facet: {
+              metadata: [
+                {
+                  $count: 'total',
+                },
+                {
+                  $addFields: {
+                    page: params.page,
+                  },
+                },
+              ],
+              data: [
+                {
+                  $skip: (params.page - 1) * params.pageLength,
+                },
+                {
+                  $limit: params.pageLength,
+                },
+                {
+                  $lookup: {
+                    from: 'users',
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'users',
+                  },
+                },
+                { $unwind: '$users' },
+                {
+                  $project: {
+                    title: 1,
+                    body: 1,
+                    dataInsert: {
+                      $dateToString: {
+                        format: '%d/%m/%Y %H:%M',
+                        date: '$dateInsert',
+                        timezone: '-0300',
+                      },
+                    },
+                    'users.full_name': 1,
+                  },
+                },
+              ], // add projection here wish you re-shape the docs
             },
           },
         ])
 
-        const count = await NotificationModel.countDocuments()
-        return { items, count }
+        return items
       },
     }
   }

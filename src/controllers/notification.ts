@@ -53,7 +53,7 @@ export class NotificationController {
   }
 
   public async find(req: Request, res: Response) {
-    const { page = 0, pageLength = 10 } = req.query
+    const { page = 1, pageLength = 10 } = req.query
     const parameter: IPagination = {
       page: parseInt(page.toString()),
       pageLength: parseInt(pageLength.toString()),
@@ -61,9 +61,10 @@ export class NotificationController {
     try {
       const not = await this.notificationService.find(parameter)
       return res.json({
-        count: not.items.length,
-        total: Math.ceil(not.count / parseInt(pageLength.toString())),
-        items: not.items,
+        total: Math.ceil(
+          not[0].metadata[0].total / parseInt(pageLength.toString())
+        ),
+        items: not,
       })
     } catch (error) {
       return res.json(error)
