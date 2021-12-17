@@ -7,6 +7,7 @@ import admin from 'firebase-admin'
 import { Types } from 'mongoose'
 import {
   ICreate,
+  IPagination,
   NotificationOptions,
 } from '@src/utils/types/models/notification'
 import { INotificationService } from '@src/services/notification'
@@ -46,6 +47,24 @@ export class NotificationController {
     try {
       const dates = await this.notificationService.getDate(Types.ObjectId(id))
       return res.json(dates)
+    } catch (error) {
+      return res.json(error)
+    }
+  }
+
+  public async find(req: Request, res: Response) {
+    const { page = 0, pageLength = 10 } = req.query
+    const parameter: IPagination = {
+      page: parseInt(page.toString()),
+      pageLength: parseInt(pageLength.toString()),
+    }
+    try {
+      const not = await this.notificationService.find(parameter)
+      return res.json({
+        count: not.items.length,
+        total: Math.ceil(not.count / parseInt(pageLength.toString())),
+        items: not.items,
+      })
     } catch (error) {
       return res.json(error)
     }

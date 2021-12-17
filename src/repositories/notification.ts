@@ -1,11 +1,12 @@
 import Container from '@src/configs/ioc'
 import NotificationModel from '@src/models/notification'
-import { ICreate } from '@src/utils/types/models/notification'
+import { ICreate, IPagination } from '@src/utils/types/models/notification'
 import { Types } from 'mongoose'
 
 export interface INotificationRepository {
   create(params: ICreate): Promise<any>
   getDate(userId: Types.ObjectId): Promise<any>
+  find(params: IPagination): Promise<any>
 }
 
 export const NotificationRepository =
@@ -22,7 +23,6 @@ export const NotificationRepository =
               userId: userId,
             },
           },
-
           {
             $group: {
               _id: {
@@ -64,6 +64,28 @@ export const NotificationRepository =
           },
         ])
         return item
+      },
+      find: async (params: IPagination) => {
+        const items = await NotificationModel.aggregate([
+          {
+            $sort: {
+              _id: -1,
+            },
+          },
+          { $skip: params.page },
+          { $limit: params.pageLength },
+          {
+            $project: {
+              _id: 1,
+              title: 1,
+              body: 1,
+              dateInsert: 1,
+            },
+          },
+        ])
+
+        const count = await NotificationModel.countDocuments()
+        return { items, count }
       },
     }
   }

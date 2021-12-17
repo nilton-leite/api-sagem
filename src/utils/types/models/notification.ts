@@ -22,3 +22,7 @@ export interface ICreate {
   userId: Types.ObjectId
   sent: Sent
 }
+export interface IPagination {
+  page: number
+  pageLength: number
+}

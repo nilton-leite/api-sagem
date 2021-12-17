@@ -70,6 +70,11 @@ export default async ({
     notificationController.get.bind(notificationController)
   )
 
+  router.get(
+    '/notifications/get',
+    notificationController.find.bind(notificationController)
+  )
+
   // Roda todo dia as 06 da manhã - Exclui todos os agendamentos que passaram da data
   cron.schedule('0 6 * * *', () => schedulesController.cancelSchedules())
 
